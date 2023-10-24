@@ -54,7 +54,7 @@ yarn
 yarn dev
 ```
 
-note: in future to start up again 
+note: in future to start up again
 ```
 source venv/bin/activate
 yarn dev
@@ -198,6 +198,12 @@ venv
 api/__pycache__/
 ```
 
+Update requirements after installing via pip install
+
+```
+pip freeze > requirements.txt
+```
+
 ### Daisy ui & Typography
 https://daisyui.com/docs/use/
 
@@ -209,7 +215,7 @@ just adding `prose` class will auto make text styling nice
 ### Faster Coding with React
 In VSCode add ES7+ React/Redux/React-Native snippets dsznajder
 type 'rfc...' options will open up
-'rfce' will create 
+'rfce' will create
 ```
 import React from 'react'
 
