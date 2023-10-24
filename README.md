@@ -35,6 +35,18 @@ You can clone & deploy it to Vercel with one click:
 
 ## Getting Started
 
+Install pnpm (on mac)
+```
+brew install pnpm
+```
+
+Setup Python Env
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
 First, install the dependencies & run the development server:
 
 ```bash

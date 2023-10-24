@@ -12,7 +12,10 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*.{js,ts,tsx}": [
+      "prettier --write",
+      "next lint"
+    ]
   },
   "dependencies": {
     "concurrently": "^8.2.2",
