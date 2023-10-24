@@ -88,3 +88,23 @@ pasted into .prettierrc
     "trailingComma": "es5"
 }
 ```
+
+### Adding husky
+
+```
+yarn add --dev husky lint-staged
+npx husky install
+npm pkg set scripts.prepare="husky install"
+npx husky add .husky/pre-commit "npx lint-staged"
+```
+
+Added to package.json which will run prettier and lint on staged files
+
+```
+"lint-staged": {
+    "**/*.{js,ts,tsx}": [
+        "prettier --write",
+        "next lint"
+    ]
+}
+```
