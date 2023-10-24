@@ -192,3 +192,9 @@ venv
 api/__pycache__/
 ```
 
+### Daisy ui & Typography
+https://daisyui.com/docs/use/
+
+https://tailwindcss.com/docs/typography-plugin
+just adding `prose` class will auto make text styling nice
+
