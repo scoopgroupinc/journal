@@ -40,4 +40,4 @@ package-lock.json
 
 ### python
 venv
-api/__pycache__/
+__pycache__
