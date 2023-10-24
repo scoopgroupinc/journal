@@ -54,6 +54,12 @@ yarn
 yarn dev
 ```
 
+note: in future to start up again 
+```
+source venv/bin/activate
+yarn dev
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 The Flask server will be running on [http://127.0.0.1:5328](http://127.0.0.1:5328) – feel free to change the port in `package.json` (you'll also need to update it in `next.config.js`).
@@ -198,3 +204,20 @@ https://daisyui.com/docs/use/
 https://tailwindcss.com/docs/typography-plugin
 just adding `prose` class will auto make text styling nice
 
+
+
+### Faster Coding with React
+In VSCode add ES7+ React/Redux/React-Native snippets dsznajder
+type 'rfc...' options will open up
+'rfce' will create 
+```
+import React from 'react'
+
+function page() {
+  return (
+    <div>page</div>
+  )
+}
+
+export default page
+```
