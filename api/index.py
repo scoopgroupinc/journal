@@ -32,6 +32,9 @@ def create_app():
 
     create_authentication_routes(api=api)
 
+    from entries.routes import create_entries_routes
+    create_entries_routes(api=api)
+
     db.init_app(app)
 
     with app.app_context():

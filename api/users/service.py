@@ -76,6 +76,7 @@ def login_user(request, input_data):
             environ.get("SECRET_KEY"),
         )
         input_data["token"] = token
+        input_data["id"] = get_user.id
         input_data.pop("password")
         return generate_response(
             data=input_data, message="User login successfully", status=HTTP_201_CREATED

@@ -5,10 +5,13 @@ https://medium.com/@rajputgajanan50/flask-rest-api-with-user-signup-login-with-j
 https://github.com/gajanan0707/Flask_Demo_Rest
 
 
-add --
-Flask-RESTful
-PyJWT
-Flask-Bcrypt
-marshmallow
-SQLAlchemy
-python-dotenv
+
+this got us login and token generation
+
+---
+
+stole auth middleware function from: https://www.loginradius.com/blog/engineering/guest-post/securing-flask-api-with-jwt/#auth-routes
+
+and found out how to wrap flask_restful resources here:
+
+https://flask-restful.readthedocs.io/en/latest/extending.html?highlight=Resource#resource-method-decorators
