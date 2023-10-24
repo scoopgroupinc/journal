@@ -149,3 +149,46 @@ Added to package.json which will run prettier and lint on staged files
     ]
 }
 ```
+### copied files from vercel template setup for python related
+https://github.com/vercel/examples/tree/main/python/nextjs-flask
+- requirements.txt
+- api
+- pnpn-lock.yaml
+- yarn add -D concurrently
+- updating package.json scripts
+```
+  "scripts": {
+    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/index run -p 5328",
+    "next-dev": "next dev",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky install"
+  },
+  ```
+  - updated next.config.js
+  ```
+  /** @type {import('next').NextConfig} */
+const nextConfig = {
+  rewrites: async () => {
+    return [
+      {
+        source: "/api/:path*",
+        destination:
+          process.env.NODE_ENV === "development" ? "http://127.0.0.1:5328/api/:path*" : "/api/",
+      },
+    ];
+  },
+};
+
+module.exports = nextConfig;
+```
+
+Adding Python Gitignore
+```
+### python
+venv
+api/__pycache__/
+```
+
