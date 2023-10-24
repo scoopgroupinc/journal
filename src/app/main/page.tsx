@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from "react";
 function Main() {
   const [message, setMessage] = useState<string>("Loading...");
   useEffect(() => {
-    fetch("http://127.0.0.1:5328/api/json")
+    fetch("/api/json")
       .then((res) => res.json())
       .then((data) => console.log(setMessage(data.message)));
   }, []);
