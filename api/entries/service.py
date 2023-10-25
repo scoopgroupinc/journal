@@ -3,6 +3,12 @@ from server import db
 from utils.common import generate_response
 from utils.http_code import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from auth_middleware import token_required
+from context import session_state
+from langchain.llms import Clarifai
+from langchain import PromptTemplate
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory, ChatMessageHistory
+from langchain.schema import HumanMessage, AIMessage
 
 def create_entry(user, input_data):
     """
@@ -70,3 +76,28 @@ def get_entries(user, request):
         data=[entry.as_dict() for entry in entries], message="Found entries", status=HTTP_201_CREATED
     )
 
+def sentiment_analysis(token, message):
+
+    llmName="GPT-4"
+    llmAuthor="openai"
+    llmApp="chat-completion"
+
+    llm = Clarifai(pat=token, user_id=llmAuthor, app_id=llmApp, model_id=llmName)
+
+    template = """
+    Current conversation:
+    {chat_history}
+    Human: {input}
+    AI Assistant:"""
+
+    prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
+
+    conversation = ConversationChain(
+    prompt=prompt,
+    llm=llm,
+    verbose=True,
+    memory=ConversationBufferMemory(ai_prefix="AI Assistant", memory_key="chat_history"),
+    )
+
+    response = conversation.predict(input=message, chat_history=session_state["chat_history"])
+    return response

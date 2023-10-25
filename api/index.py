@@ -7,6 +7,7 @@ from flask_mail import Mail
 from server import db, mail
 from flask_cors import CORS
 from dotenv import load_dotenv
+from services import sentiment_analysis
 
 load_dotenv()
 secret_key = os.getenv('SECRET_KEY')
@@ -25,10 +26,15 @@ def create_app():
     app.config["MAIL_PASSWORD"] = os.environ.get("EMAIL_HOST_PASSWORD")
     app.config["MAIL_USE_TLS"] = False
     app.config["MAIL_USE_SSL"] = True
+    app.config["CLARIFAI_PATH"] = os.environ.get("CLARIFAI_PATH")
 
     @app.route("/api/json")
     def hello_json():
         return jsonify({"message": f"Hello, World! {secret_key}."})
+    
+    @app.route("/api/sentiment")
+    def sentiment():
+        return sentiment_analysis()
 
     mail = Mail(app)
 
