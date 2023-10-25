@@ -1,7 +1,7 @@
 import React from "react";
 
-function Dashboard({ params: { token } }: { params: { token: string } }) {
-  return <div>Dashboard {token}</div>;
+function Dashboard() {
+  return <div>Dashboard</div>;
 }
 
 export default Dashboard;

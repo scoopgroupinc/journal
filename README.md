@@ -227,3 +227,7 @@ function page() {
 
 export default page
 ```
+
+### env
+must just .env.local for nextjs
+Bundle environment variables for the browser by prefixing with NEXT_PUBLIC_ (meaning react based env)

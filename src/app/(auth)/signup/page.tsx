@@ -54,7 +54,7 @@ function SignUp() {
   };
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center bg-gray-200">
+    <div className="h-screen w-screen flex justify-center items-center">
       {errorMessage !== "" && (
         <div className="absolute w-full p-2 top-0">
           <div className="alert alert-warning">
