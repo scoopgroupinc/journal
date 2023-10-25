@@ -7,8 +7,7 @@ from context import session_state
 from langchain.llms import Clarifai
 from langchain import PromptTemplate
 from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory, ChatMessageHistory
-from langchain.schema import HumanMessage, AIMessage
+from langchain.memory import ConversationBufferMemory
 
 def create_entry(user, input_data):
     """
