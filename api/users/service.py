@@ -121,16 +121,40 @@ def reset_password(request, input_data, token):
             message="Token is required!",
             status=HTTP_400_BAD_REQUEST,
         )
-    token = TokenGenerator.decode_token(token)
-    user = User.query.filter_by(id=token.get('id')).first()
-    if user is None:
+    try:
+        print("token", token)
+        decoded_token = TokenGenerator.decode_token(token)
+
+        expiry_date = decoded_token.get('exp')
+
+        if expiry_date:  # Ensure there is an 'exp' claim
+        # Convert the expiry date from a timestamp to a datetime object
+            expiry_datetime = datetime.fromtimestamp(expiry_date)
+
+            if datetime.now() >= expiry_datetime:
+                return generate_response(
+                    message="Token has expired!",
+                    status=HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return generate_response(
+                message="Token has no expiry claim!",
+                status=HTTP_400_BAD_REQUEST,
+            )
+        user = User.query.filter_by(id=token.get('id')).first()
+        if user is None:
+            return generate_response(
+                message="No record found with this email. please signup first.",
+                status=HTTP_400_BAD_REQUEST,
+            )
+        user = User.query.filter_by(id=token['id']).first()
+        user.password = generate_password_hash(input_data.get('password')).decode("utf8")
+        db.session.commit()
         return generate_response(
-            message="No record found with this email. please signup first.",
+            message="New password SuccessFully set.", status=HTTP_200_OK
+        )
+    except Exception as e:
+         return generate_response(
+            message="Token is invalid!",
             status=HTTP_400_BAD_REQUEST,
         )
-    user = User.query.filter_by(id=token['id']).first()
-    user.password = generate_password_hash(input_data.get('password')).decode("utf8")
-    db.session.commit()
-    return generate_response(
-        message="New password SuccessFully set.", status=HTTP_200_OK
-    )
