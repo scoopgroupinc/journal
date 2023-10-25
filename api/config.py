@@ -13,7 +13,7 @@ class Config:
     # General Config
     SECRET_KEY = environ.get("SECRET_KEY")
     FLASK_APP = environ.get("FLASK_APP")
-    FLASK_ENV = environ.get("FLASK_ENV")
+    FLASK_DEV = environ.get("FLASK_DEV")
 
     # Database
     SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")

@@ -36,14 +36,11 @@ def create_app():
     def sentiment():
         return sentiment_analysis()
 
-    mail = Mail(app)
-
     app.config.from_object("config.Config")
 
     api = Api(app=app)
 
     from users.routes import create_authentication_routes
-
     create_authentication_routes(api=api)
 
     from entries.routes import create_entries_routes
