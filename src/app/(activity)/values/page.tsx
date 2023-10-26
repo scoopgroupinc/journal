@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { constructHtmlFile } from "../../../lib/constructHtmlFile";
 import ChevronLeft from "@/components/icons/chevron-left";
 import TinyMCE from "@/components/TinyMCE";
+import { downloadHtmlFile } from "@/lib/downloadHtml";
 
 function Values({ params: { token } }: { params: { token: string } }) {
   const router = useRouter();
@@ -15,25 +16,23 @@ function Values({ params: { token } }: { params: { token: string } }) {
 <li><p><strong>Reflect on Happiness</strong>: When have you been happiest in your life? What were you doing, and what elements contributed to your happiness?</p></li><li><p><strong>Peak Experiences</strong>: Think about your most rewarding experiences. What made them so? What were you doing, and what aspects of those situations are noteworthy?</p></li><li><p><strong>Admiration Insights</strong>: Who do you admire most? What qualities do these people possess that you respect? Can you see any patterns that point toward values?</p></li><li><p><strong>Challenges and Persistence</strong>: Recall a time when you faced challenges and persevered. What was the driving force that kept you going? Why did that matter to you?</p></li><li><p><strong>Joy in Activity</strong>: What activities cause you to lose track of time? What are you doing when you feel most alive, and what does this suggest about your values?</p></li><li><p><strong>Life Review</strong>: If you were to describe your ideal life, what would it look like? What elements are present, and what values are you honoring in this life?</p></li><li><p><strong>Regrets and Changes</strong>: Are there any regrets you have or things you would do differently if given a chance? What does this tell you about what is important to you?</p></li><li><p><strong>Contribution and Impact</strong>: How do you most enjoy helping others? What change would you most like to make in the world?</p></li><li><p><strong>Non-negotiables</strong>: What would you never compromise on, no matter the situation? What crosses a moral line for you?</p></li><li><p><strong>Energy Drivers</strong>: What topics make you excited to talk about for hours, defend, or debate?</p></li><li><p><strong>Legacy Creation</strong>: What do you want to be remembered for after you're gone? What legacy do you want to leave?</p></li><li><p><strong>Resource Allocation</strong>: Where do you spend your time and money effortlessly? What priorities does this reveal?</p></li><li><p><strong>Emotional Triggers</strong>: What situations or actions make you truly upset or deeply happy? What values are being challenged or honored in those situations?</p></li><li><p><strong>Decision Reflection</strong>: Think about a decision you made that you felt good about. What about that decision was satisfying? What values were you honoring?</p></li><li><p><strong>Values in Others</strong>: What traits or behaviors do you consistently promote or try to instill in others, especially younger generations?</p></li>
 </ul>`;
   const editorRef = useRef(null);
-  const log = () => {
+  const download = () => {
     if (editorRef.current) {
       const htmlString = editorRef.current.getContent();
-      const text = editorRef.current.getContent({ format: "text" });
-      console.log(text);
-      console.log("------");
-      try {
-        fetch("/api/save_html", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
-        })
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      downloadHtmlFile(constructHtmlFile(htmlString));
+      // try {
+      //   fetch("/api/save_html", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => console.log(data));
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
     }
   };
 
@@ -61,7 +60,7 @@ function Values({ params: { token } }: { params: { token: string } }) {
           Choose some of the following ways to help you indentify your goals
         </h4>
         <TinyMCE onInit={onInit} initialValue={initialValue} />
-        <button className="btn mt-4 btn-secondary" onClick={log}>
+        <button className="btn mt-4 btn-secondary" onClick={download}>
           Download Journal as HTML
         </button>
       </div>

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { constructHtmlFile } from "../../../lib/constructHtmlFile";
 import ChevronLeft from "@/components/icons/chevron-left";
 import TinyMCE from "@/components/TinyMCE";
+import { downloadHtmlFile } from "@/lib/downloadHtml";
 
 function Goals({ params: { token } }: { params: { token: string } }) {
   const router = useRouter();
@@ -35,25 +36,23 @@ function Goals({ params: { token } }: { params: { token: string } }) {
 <li>What is the first step you need to take?</li>
 </ul>`;
   const editorRef = useRef(null);
-  const log = () => {
+  const download = () => {
     if (editorRef.current) {
       const htmlString = editorRef.current.getContent();
-      const text = editorRef.current.getContent({ format: "text" });
-      console.log(text);
-      console.log("------");
-      try {
-        fetch("/api/save_html", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
-        })
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      downloadHtmlFile(constructHtmlFile(htmlString));
+      // try {
+      //   fetch("/api/save_html", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => console.log(data));
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
     }
   };
 
@@ -79,7 +78,7 @@ function Goals({ params: { token } }: { params: { token: string } }) {
         </div>
         <h4 className="text-white">What goal do you want to achieve?</h4>
         <TinyMCE onInit={onInit} initialValue={initialValue} />
-        <button className="btn mt-4 btn-secondary" onClick={log}>
+        <button className="btn mt-4 btn-secondary" onClick={download}>
           Download Journal as HTML
         </button>
       </div>

@@ -1,15 +1,15 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FEELINGS, SIMILAR_FEELINGS } from "../../lib/nonviolentcommunication";
+import { FEELINGS, SIMILAR_FEELINGS } from "@/lib/nonviolentcommunication";
 import ChevronLeft from "@/components/icons/chevron-left";
 import TinyMCE from "@/components/TinyMCE";
+import SentimentTable from "@/components/SentimentTable";
+import { downloadHtmlFile } from "@/lib/downloadHtml";
+import { constructHtmlFile } from "@/lib/constructHtmlFile";
 
 function Dashboard({ params: { token } }: { params: { token: string } }) {
-  const openai_key = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-  const tinymce_key = process.env.NEXT_PUBLIC_TINYMCE_API_KEY;
-  console.log("tinymce_key", tinymce_key);
-  console.log("openai_key", process.env.NEXT_PUBLIC_OPENAI_API_KEY);
+  const [sentiment, setSentiment] = useState([]);
 
   const router = useRouter();
 
@@ -41,12 +41,10 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
   };
 
   const editorRef = useRef(null);
-  const log = () => {
+  const download = () => {
     if (editorRef.current) {
       const htmlString = editorRef.current.getContent();
-      const text = editorRef.current.getContent({ format: "text" });
-      console.log(text);
-      console.log("------");
+      downloadHtmlFile(constructHtmlFile(htmlString));
       // try {
       //   fetch("/api/save_html", {
       //     method: "POST",
@@ -60,17 +58,30 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
       // } catch (error) {
       //   console.error("Error:", error);
       // }
+    }
+  };
 
+  const getAnalysis = () => {
+    if (editorRef.current) {
+      const text = editorRef.current.getContent({ format: "text" });
+      console.log(text);
       try {
         fetch("/api/sentiment", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          timeout: 40000,
           body: JSON.stringify({ data: text }),
         })
           .then((response) => response.json())
-          .then((data) => console.log("sentiment", data));
+          .then((data) => {
+            console.log(data.data);
+            const sent = JSON.parse(data.data);
+            if (sent?.records) {
+              setSentiment(sent.records);
+            }
+          });
       } catch (error) {
         console.error("Error:", error);
       }
@@ -111,11 +122,6 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
             })}
           </div>
         </div>
-        <h4 className="text-white">What happened?</h4>
-        <TinyMCE onInit={onInit} />
-        <button className="btn mt-4 btn-secondary" onClick={log}>
-          Submit
-        </button>
         <h4 className="text-white">Select what you&rsquo;re feeling</h4>
         <div className="collapse bg-white">
           <input type="radio" name="feeling-accordion" />
@@ -165,7 +171,6 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
                           ))}
                       </div>
                     </div>
-                    <div className="w-full text-center"></div>
                   </div>
                 ))}
             </div>
@@ -227,6 +232,24 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
             </div>
           </div>
         </div>
+        <h4 className="text-white">What happened?</h4>
+        <TinyMCE onInit={onInit} />
+        <button className="btn mt-4 btn-secondary" onClick={download}>
+          Download as HTML
+        </button>
+
+        <button className="btn mt-4 btn-secondary" onClick={getAnalysis}>
+          Get Sentiment Analysis
+        </button>
+
+        <SentimentTable sentiment={sentiment} />
+
+        {sentiment && (
+          <div>
+            <h4 className="prose text-white">What would you do differently now?</h4>
+            <textarea className="textarea w-full" />
+          </div>
+        )}
       </div>
       <footer className="footer p-10 bg-neutral text-neutral-content mt-[100px]">
         <nav>
