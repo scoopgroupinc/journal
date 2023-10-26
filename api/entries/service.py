@@ -103,7 +103,5 @@ def sentiment_analysis(token, message):
 
     data = conversation.run(message)
 
-    # Convert the dictionary to a JSON string
-    response_json = json.dumps(data)
-    print(response_json)
-    return generate_response(data=response_json, message="Sentiment Analysis", status=HTTP_201_CREATED)
+    print(data)
+    return generate_response(data=data, message="Sentiment Analysis", status=HTTP_201_CREATED)
