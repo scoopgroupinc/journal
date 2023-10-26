@@ -2,6 +2,7 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { FEELINGS, SIMILAR_FEELINGS } from "../../lib/nonviolentcommunication";
+import { constructHtmlFile } from "../../lib/constructHtmlFile";
 
 function Dashboard({ params: { token } }: { params: { token: string } }) {
   const openai_key = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
@@ -39,7 +40,23 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
   const editorRef = useRef(null);
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      const htmlString = editorRef.current.getContent();
+      console.log(htmlString);
+      console.log("------");
+      console.log(constructHtmlFile(htmlString));
+      try {
+        fetch("/api/save_html", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data));
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -79,7 +96,7 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
             plugins:
               "insertdatetime ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss",
             toolbar:
-              "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+              "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat | insertdatetime",
             insertdatetime_dateformat: "%d-%m-%Y",
             tinycomments_mode: "embedded",
             tinycomments_author: "Author name",
