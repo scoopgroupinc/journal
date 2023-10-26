@@ -8,7 +8,6 @@ from server import db, mail
 from flask_cors import CORS
 from dotenv import load_dotenv
 from entries.service import sentiment_analysis
-from context import session_state
 from datetime import datetime
 
 load_dotenv()

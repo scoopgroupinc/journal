@@ -64,7 +64,7 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data: "I am sad" }),
+          body: JSON.stringify({ data: text }),
         })
           .then((response) => response.json())
           .then((data) => console.log("sentiment", data));

@@ -3,11 +3,15 @@ from server import db
 from utils.common import generate_response
 from utils.http_code import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from auth_middleware import token_required
-from context import session_state
+from context import SYSTEM_PROMPT
 from langchain.llms import Clarifai
-from langchain import PromptTemplate
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
+from langchain.chains import LLMChain
+from langchain.schema import SystemMessage
+from langchain.chat_models import ChatOpenAI
+import os
+import json
+
+pat_openai=os.environ.get("NEXT_PUBLIC_OPENAI_API_KEY")
 
 def create_entry(user, input_data):
     """
@@ -81,22 +85,25 @@ def sentiment_analysis(token, message):
     llmAuthor="openai"
     llmApp="chat-completion"
 
-    llm = Clarifai(pat=token, user_id=llmAuthor, app_id=llmApp, model_id=llmName)
+    llm = ChatOpenAI(openai_api_key=pat_openai)
+    # llm=Clarifai(pat=token, user_id=llmAuthor, app_id=llmApp, model_id=llmName)
 
-    template = """
-    Current conversation:
-    {chat_history}
-    Human: {input}
-    AI Assistant:"""
-
-    prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
-
-    conversation = ConversationChain(
-    prompt=prompt,
-    llm=llm,
-    verbose=True,
-    memory=ConversationBufferMemory(ai_prefix="AI Assistant", memory_key="chat_history"),
+    prompt = SystemMessage(content=SYSTEM_PROMPT)
+    new_prompt = (
+    prompt
+    + "{input}"
     )
 
-    data = conversation.predict(input=message, chat_history=session_state["chat_history"])
-    return generate_response(data=data, message="Sentiment Analysis", status=HTTP_201_CREATED)
+    new_prompt.format_messages(input=message)
+
+    conversation = LLMChain(
+    prompt=new_prompt,
+    llm=llm
+    )
+
+    data = conversation.run(message)
+
+    # Convert the dictionary to a JSON string
+    response_json = json.dumps(data)
+    print(response_json)
+    return generate_response(data=response_json, message="Sentiment Analysis", status=HTTP_201_CREATED)
