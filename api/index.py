@@ -7,12 +7,9 @@ from flask_mail import Mail
 from server import db, mail
 from flask_cors import CORS
 from dotenv import load_dotenv
-<<<<<<< Updated upstream
-from services import sentiment_analysis
+from entries.service import sentiment_analysis
 from context import session_state
-=======
 from datetime import datetime
->>>>>>> Stashed changes
 
 load_dotenv()
 secret_key = os.getenv('SECRET_KEY')
@@ -39,9 +36,11 @@ def create_app():
     def hello_json():
         return jsonify({"message": f"Hello, World! {secret_key}."})
     
-    @app.route("/api/sentiment")
+    @app.route("/api/sentiment", methods=['POST'])
     def sentiment():
-        return sentiment_analysis(clarifai_key,session_state['input'])
+        data = request.json['data'] 
+        print(data)
+        return sentiment_analysis(clarifai_key, data)
 
     @app.route('/api/save_html', methods=['POST'])
     def save_html():

@@ -41,19 +41,33 @@ function Dashboard({ params: { token } }: { params: { token: string } }) {
   const log = () => {
     if (editorRef.current) {
       const htmlString = editorRef.current.getContent();
-      console.log(htmlString);
+      const text = editorRef.current.getContent({ format: "text" });
+      console.log(text);
       console.log("------");
-      console.log(constructHtmlFile(htmlString));
+      // try {
+      //   fetch("/api/save_html", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => console.log(data));
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
+
       try {
-        fetch("/api/save_html", {
+        fetch("/api/sentiment", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data: constructHtmlFile(htmlString).toString() }), // send the HTML data as a JSON payload
+          body: JSON.stringify({ data: "I am sad" }),
         })
           .then((response) => response.json())
-          .then((data) => console.log(data));
+          .then((data) => console.log("sentiment", data));
       } catch (error) {
         console.error("Error:", error);
       }

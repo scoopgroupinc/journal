@@ -98,5 +98,5 @@ def sentiment_analysis(token, message):
     memory=ConversationBufferMemory(ai_prefix="AI Assistant", memory_key="chat_history"),
     )
 
-    response = conversation.predict(input=message, chat_history=session_state["chat_history"])
-    return response
+    data = conversation.predict(input=message, chat_history=session_state["chat_history"])
+    return generate_response(data=data, message="Sentiment Analysis", status=HTTP_201_CREATED)
