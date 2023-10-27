@@ -12,11 +12,9 @@ export default function TinyMCE({ onInit, initialValue }: { onInit: any; initial
       onInit={onInit}
       init={{
         plugins:
-          "insertdatetime ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss emoticons",
+          "insertdatetime ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste autocorrect a11ychecker typography inlinecss emoticons",
         toolbar:
           "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat | insertdatetime emoticons",
-        spellchecker_languages:
-          "US English=en_US,UK English=en_GB,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Norwegian=nb,Brazilian Portuguese=pt,Iberian Portuguese=pt_PT,Spanish=es,Swedish=sv",
         insertdatetime_dateformat: "%d-%m-%Y",
         tinycomments_mode: "embedded",
         tinycomments_author: "Author name",
