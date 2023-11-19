@@ -3,6 +3,15 @@ from server import db
 from utils.common import generate_response
 from utils.http_code import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from auth_middleware import token_required
+from context import SYSTEM_PROMPT
+from langchain.llms import Clarifai
+from langchain.chains import LLMChain
+from langchain.schema import SystemMessage
+from langchain.chat_models import ChatOpenAI
+import os
+import json
+
+pat_openai=os.environ.get("NEXT_PUBLIC_OPENAI_API_KEY")
 
 def create_entry(user, input_data):
     """
@@ -70,3 +79,29 @@ def get_entries(user, request):
         data=[entry.as_dict() for entry in entries], message="Found entries", status=HTTP_201_CREATED
     )
 
+def sentiment_analysis(token, message):
+
+    llmName="GPT-4"
+    llmAuthor="openai"
+    llmApp="chat-completion"
+
+    llm = ChatOpenAI(openai_api_key=pat_openai)
+    # llm=Clarifai(pat=token, user_id=llmAuthor, app_id=llmApp, model_id=llmName)
+
+    prompt = SystemMessage(content=SYSTEM_PROMPT)
+    new_prompt = (
+    prompt
+    + "{input}"
+    )
+
+    new_prompt.format_messages(input=message)
+
+    conversation = LLMChain(
+    prompt=new_prompt,
+    llm=llm
+    )
+
+    data = conversation.run(message)
+
+    print(data)
+    return generate_response(data=data, message="Sentiment Analysis", status=HTTP_201_CREATED)
