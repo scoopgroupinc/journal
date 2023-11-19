@@ -20,4 +20,4 @@ pytz==2023.3.post1
 six==1.16.0
 SQLAlchemy==2.0.22
 typing_extensions==4.8.0
-Werkzeug==2.3.8
+Werkzeug==2.2.2
