@@ -7,7 +7,7 @@ attrs==23.1.0
 bcrypt==4.0.1
 blinker==1.6.3
 certifi==2023.7.22
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
 clarifai==9.8.1
 clarifai-grpc==9.9.3
 click==8.1.7
