@@ -12,8 +12,8 @@ dependencies:
     specifier: ^4.3.0
     version: 4.3.2(react-dom@18.2.0)(react@18.2.0)
   googleapis:
-    specifier: ^128.0.0
-    version: 128.0.0
+    specifier: ^131.0.0
+    version: 131.0.0
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -1818,8 +1818,8 @@ packages:
       - supports-color
     dev: false
 
-  /googleapis@128.0.0:
-    resolution: {integrity: sha512-+sLtVYNazcxaSD84N6rihVX4QiGoqRdnlz2SwmQQkadF31XonDfy4ufk3maMg27+FiySrH0rd7V8p+YJG6cknA==}
+  /googleapis@131.0.0:
+    resolution: {integrity: sha512-fa4kdkY0VwHDw/04ItpQv2tlvlPIwbh6NjHDoWAVrV52GuaZbYCMOC5Y+hRmprp5HHIMRODmyb2YujlbZSRUbQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
       google-auth-library: 9.2.0
